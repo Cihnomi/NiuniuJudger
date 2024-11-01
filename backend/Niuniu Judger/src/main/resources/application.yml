@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/github_talent_rank?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  redis:
+    host: localhost
+    port: 6379
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.githubtalentrank.model
+
+github:
+  api:
+    token: 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
+
+openai:
+  api:
+    key: sk-iqHgLKq1kvWh4wtn422dD8557b4f451e87E7DcC8B6Cf4f15

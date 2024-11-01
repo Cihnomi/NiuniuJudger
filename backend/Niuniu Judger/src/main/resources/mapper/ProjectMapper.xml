@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Niuniu_Judger.mapper.ProjectMapper">
+
+    <insert id="insertProject" parameterType="com.example.Niuniu_Judger.model.Project">
+        INSERT INTO project (github_id, name, full_name, owner_id, html_url, description, language, stargazers_count, forks_count, watchers_count, project_rank, created_at, updated_at)
+        VALUES (#{githubId}, #{name}, #{fullName}, #{ownerId}, #{htmlUrl}, #{description}, #{language}, #{stargazersCount}, #{forksCount}, #{watchersCount}, #{projectRank}, NOW(), NOW())
+    </insert>
+
+    <update id="updateProject" parameterType="com.example.Niuniu_Judger.model.Project">
+        UPDATE project
+        SET name = #{name},
+            full_name = #{fullName},
+            owner_id = #{ownerId},
+            html_url = #{htmlUrl},
+            description = #{description},
+            language = #{language},
+            stargazers_count = #{stargazersCount},
+            forks_count = #{forksCount},
+            watchers_count = #{watchersCount},
+            project_rank = #{projectRank},
+            updated_at = NOW()
+        WHERE github_id = #{githubId}
+    </update>
+
+    <select id="selectProjectByGitHubId" resultType="com.example.Niuniu_Judger.model.Project">
+        SELECT * FROM project WHERE github_id = #{githubId}
+    </select>
+
+</mapper>

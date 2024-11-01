@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Niuniu_Judger.mapper.DeveloperMapper">
+
+    <!-- Insert Developer -->
+    <insert id="insertDeveloper" parameterType="com.example.Niuniu_Judger.model.Developer">
+        INSERT INTO Developer (
+            id, github_id, username, avatar_url, bio, company, location, email, public_repos,
+            name, profile_url, blog, talent_rank, nation, nation_confidence, domain,
+            domain_confidence, followers_count, following_count, page_rank_score, contribution_value,
+            html_url, comment
+        ) VALUES (
+                     #{id}, #{githubId}, #{username}, #{avatarUrl}, #{bio}, #{company}, #{location},
+                     #{email}, #{publicRepos}, #{name}, #{profileUrl}, #{blog}, #{talentRank}, #{nation},
+                     #{nationConfidence}, #{domain}, #{domainConfidence}, #{followersCount}, #{followingCount},
+                     #{pageRankScore}, #{contributionValue}, #{htmlUrl}, #{comment}
+                 )
+    </insert>
+
+    <!-- Update Developer -->
+    <update id="updateDeveloper" parameterType="com.example.Niuniu_Judger.model.Developer">
+        UPDATE Developer SET
+                             github_id = #{githubId},
+                             username = #{username},
+                             avatar_url = #{avatarUrl},
+                             bio = #{bio},
+                             company = #{company},
+                             location = #{location},
+                             email = #{email},
+                             public_repos = #{publicRepos},
+                             name = #{name},
+                             profile_url = #{profileUrl},
+                             blog = #{blog},
+                             talent_rank = #{talentRank},
+                             nation = #{nation},
+                             nation_confidence = #{nationConfidence},
+                             domain = #{domain},
+                             domain_confidence = #{domainConfidence},
+                             followers_count = #{followersCount},
+                             following_count = #{followingCount},
+                             page_rank_score = #{pageRankScore},
+                             contribution_value = #{contributionValue},
+                             html_url = #{htmlUrl},
+                             comment = #{comment}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Select Developer by Username -->
+    <select id="selectDeveloperByUsername" parameterType="string" resultType="com.example.Niuniu_Judger.model.Developer">
+        SELECT * FROM Developer WHERE username = #{name}
+    </select>
+
+    <!-- Select Developer by GitHub ID -->
+    <select id="selectDeveloperByGitHubId" parameterType="string" resultType="com.example.Niuniu_Judger.model.Developer">
+        SELECT * FROM Developer WHERE github_id = #{githubId}
+    </select>
+
+    <!-- Select Developers by Criteria -->
+    <select id="selectDevelopersByCriteria" parameterType="map" resultType="com.example.Niuniu_Judger.model.Developer">
+        SELECT * FROM Developer
+        WHERE domain = #{domain}
+          AND nation = #{nation}
+    </select>
+
+    <!-- Update Developer Scores -->
+    <update id="updateDeveloperScores" parameterType="com.example.Niuniu_Judger.model.Developer">
+        UPDATE Developer SET
+                             page_rank_score = #{pageRankScore},
+                             contribution_value = #{contributionValue}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Update Developer Talent Rank -->
+    <update id="updateDeveloperTalentRank">
+        UPDATE Developer SET
+            talent_rank = #{talentRank}
+        WHERE username = #{username}
+    </update>
+
+</mapper>
