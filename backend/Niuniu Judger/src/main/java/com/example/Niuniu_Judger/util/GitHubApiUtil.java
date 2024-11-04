@@ -229,6 +229,7 @@ public class GitHubApiUtil {
      */
     private String getNextPageUrl(String linkHeader) {
         if (linkHeader == null) {
+            System.out.println("Link header is null");
             return null;
         }
 
@@ -236,17 +237,28 @@ public class GitHubApiUtil {
         for (String link : links) {
             String[] parts = link.split(";");
             if (parts.length < 2) {
+                System.out.println("Skipping invalid link format: " + link);
                 continue;
             }
-            String url = parts[0].trim();
-            String rel = parts[1].trim();
 
+            String url = parts[0].trim();
+            if (url.startsWith("<") && url.endsWith(">")) {
+                url = url.substring(1, url.length() - 1); // 去掉尖括号
+            }
+
+            String rel = parts[1].trim();
             if ("rel=\"next\"".equals(rel)) {
-                return url.substring(1, url.length() - 1); // 去掉尖括号
+                return url;
             }
         }
+
+        // 明确返回 null 表示没有下一页
+        System.out.println("No next page found in link header");
         return null;
     }
+
+
+
 
     public Developer getDeveloperDetails(String username) throws IOException {
         String url = baseUrl + "/users/" + username;
@@ -261,17 +273,19 @@ public class GitHubApiUtil {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
             }
+
             String responseBody = response.body().string();
             JsonNode developerNode = objectMapper.readTree(responseBody);
 
-            developer.setUsername(developerNode.path("login").asText());
-            developer.setGithubId(String.valueOf(Long.valueOf(String.valueOf(developerNode.path("id").asLong()))));
-            developer.setAvatarUrl(developerNode.path("avatar_url").asText());
+            // 使用设置默认值的方式，避免不必要的空检查
+            developer.setUsername(developerNode.path("login").asText(""));
+            developer.setGithubId(String.valueOf(developerNode.path("id").asLong()));
+            developer.setAvatarUrl(developerNode.path("avatar_url").asText(""));
             developer.setBio(developerNode.path("bio").asText(""));
             developer.setCompany(developerNode.path("company").asText(""));
             developer.setLocation(developerNode.path("location").asText(""));
             developer.setEmail(developerNode.path("email").asText(""));
-            developer.setPublicRepos(developerNode.path("public_repos").asInt());
+            developer.setPublicRepos(developerNode.path("public_repos").asInt(0));
             developer.setName(developerNode.path("name").asText(""));
             developer.setProfileUrl(developerNode.path("html_url").asText(""));
             developer.setBlog(developerNode.path("blog").asText(""));
@@ -280,12 +294,17 @@ public class GitHubApiUtil {
             developer.setNationConfidence(developerNode.path("nation_confidence").asDouble(0.0));
             developer.setDomain(developerNode.path("domain").asText(""));
             developer.setDomainConfidence(developerNode.path("domain_confidence").asDouble(0.0));
-            developer.setBlog(developerNode.path("blog").asText(""));
+            developer.setFollowersCount(developerNode.path("followers").asInt(0));
+            developer.setFollowingCount(developerNode.path("following").asInt(0));
+            developer.setPageRankScore(developerNode.path("page_rank_score").asDouble(0.0));
+            developer.setContributionValue(developerNode.path("contribution_value").asDouble(0.0));
             developer.setHtmlUrl(developerNode.path("html_url").asText(""));
-
+            developer.setComment("");  // 视需求填入默认注释或从其他数据源获取
         }
+
         return developer;
     }
+
 
     public List<Developer> searchDevelopersByName(String name) throws IOException {
         List<Developer> developers = new ArrayList<>();
@@ -320,39 +339,45 @@ public class GitHubApiUtil {
     /**
      * 获取项目的贡献者用户名列表
      */
+    /**
+     * 获取项目的贡献者用户名列表
+     */
     public List<String> getProjectContributorsUsernames(String fullName) throws IOException {
         List<String> contributors = new ArrayList<>();
         String url = baseUrl + "/repos/" + fullName + "/contributors";
-        Request request = new Request.Builder()
-                .url(url)
-                .header("Authorization", "token " + gitHubApiToken)
-                .build();
 
         while (url != null) {
+            Request request = new Request.Builder()
+                    .url(url)
+                    .header("Authorization", "token " + gitHubApiToken)
+                    .build();
+
             try (Response response = client.newCall(request).execute()) {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 }
                 String responseBody = response.body().string();
                 JsonNode contributorsArray = objectMapper.readTree(responseBody);
-
+                int a = 0;
                 if (contributorsArray.isArray()) {
                     for (JsonNode contributorNode : contributorsArray) {
                         String login = contributorNode.path("login").asText();
                         contributors.add(login);
+                        System.out.println(a++);
+                        System.out.println(login);
                     }
                 }
-
                 // 获取下一页链接
                 String linkHeader = response.header("Link");
                 url = getNextPageUrl(linkHeader);
             }
         }
+        System.out.println("finished");
         return contributors;
     }
     public List<Project> getHotProjects() throws IOException {
         List<Project> projects = new ArrayList<>();
-        String url = baseUrl + "/search/repositories?q=stars:>50000&sort=stars&order=desc&per_page=10";
+        String url = baseUrl + "/search/repositories?q=stars:>1000&sort=stars&order=desc&per_page=100";
 
         Request request = new Request.Builder()
                 .url(url)

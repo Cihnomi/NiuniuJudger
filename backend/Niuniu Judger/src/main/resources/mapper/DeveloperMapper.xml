@@ -6,12 +6,12 @@
     <!-- Insert Developer -->
     <insert id="insertDeveloper" parameterType="com.example.Niuniu_Judger.model.Developer">
         INSERT INTO Developer (
-            id, github_id, username, avatar_url, bio, company, location, email, public_repos,
+            github_id, username, avatar_url, bio, company, location, email, public_repos,
             name, profile_url, blog, talent_rank, nation, nation_confidence, domain,
             domain_confidence, followers_count, following_count, page_rank_score, contribution_value,
             html_url, comment
         ) VALUES (
-                     #{id}, #{githubId}, #{username}, #{avatarUrl}, #{bio}, #{company}, #{location},
+                     #{githubId}, #{username}, #{avatarUrl}, #{bio}, #{company}, #{location},
                      #{email}, #{publicRepos}, #{name}, #{profileUrl}, #{blog}, #{talentRank}, #{nation},
                      #{nationConfidence}, #{domain}, #{domainConfidence}, #{followersCount}, #{followingCount},
                      #{pageRankScore}, #{contributionValue}, #{htmlUrl}, #{comment}

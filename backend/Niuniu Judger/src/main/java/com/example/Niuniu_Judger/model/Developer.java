@@ -2,7 +2,7 @@ package com.example.Niuniu_Judger.model;
 
 public class Developer {
     private Long id;
-    private String githubId;
+    private String github_id;
     private String username;
     private String avatarUrl;
     private String bio;
@@ -40,11 +40,11 @@ public class Developer {
     }
 
     public String getGithubId() {
-        return githubId;
+        return github_id;
     }
 
     public void setGithubId(String githubId) {
-        this.githubId = githubId;
+        this.github_id = githubId;
     }
 
     public String getUsername() {

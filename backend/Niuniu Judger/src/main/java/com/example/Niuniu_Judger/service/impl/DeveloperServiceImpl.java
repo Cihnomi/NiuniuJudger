@@ -133,6 +133,7 @@ public class DeveloperServiceImpl implements DeveloperService {
 
             DeveloperDTO dto = new DeveloperDTO();
             BeanUtils.copyProperties(developer, dto);
+            System.out.println(dto);
             return dto;
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,16 +188,11 @@ public class DeveloperServiceImpl implements DeveloperService {
     @Override
     public double calculateContributionScore(Developer developer, Project project) {
         try {
- /*
-            Contributor contributor = gitHubApiUtil.getContributorDetails(project.getFullName(), developer.getUsername());
-
-            if (contributor == null) {
+            int totalLines = gitHubApiUtil.getTotalLinesOfCode(project.getFullName());
+            if (totalLines == 0) {
                 return 0.0;
             }
-*/
-            int totalLines = gitHubApiUtil.getTotalLinesOfCode(project.getFullName());
             int developerLines = gitHubApiUtil.getLinesAdded(developer.getUsername(), project.getFullName());
-
             double codeContribution = (double) developerLines / totalLines * 100;
             return Math.min(codeContribution, 100.0);
         } catch (Exception e) {
@@ -204,6 +200,7 @@ public class DeveloperServiceImpl implements DeveloperService {
             return 0.0;
         }
     }
+
 
     /**
      * 计算项目的重要程度

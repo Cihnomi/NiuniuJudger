@@ -10,7 +10,15 @@ public class Project {
     private int stars;
     private int forks;
     private int watchers;
+    private String htmlUrl;
 
+    public String getHtmlUrl() {
+        return htmlUrl;
+    }
+
+    public void setHtmlUrl(String htmlUrl) {
+        this.htmlUrl = htmlUrl;
+    }
     // Getters and Setters
 
     public Long getId() {

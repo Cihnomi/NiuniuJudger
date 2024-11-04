@@ -4,9 +4,11 @@ import com.example.Niuniu_Judger.dto.DeveloperDTO;
 import com.example.Niuniu_Judger.model.Developer;
 import com.example.Niuniu_Judger.model.Project;
 import com.example.Niuniu_Judger.service.DeveloperService;
+import com.example.Niuniu_Judger.util.GitHubApiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -14,10 +16,12 @@ import java.util.List;
 public class DeveloperController {
 
     private final DeveloperService developerService;
+    private final GitHubApiUtil gitHubApiUtil;
 
     @Autowired
-    public DeveloperController(DeveloperService developerService) {
+    public DeveloperController(DeveloperService developerService, GitHubApiUtil gitHubApiUtil) {
         this.developerService = developerService;
+        this.gitHubApiUtil = gitHubApiUtil;
     }
 
     // --- Developer Retrieval ---
@@ -186,6 +190,10 @@ public class DeveloperController {
     @PostMapping("/sync")
     public void syncDeveloperData() {
         developerService.syncDeveloperData();
+    }
+    @GetMapping("/getprojectcontributorsusernames/{fullname}")
+    public List<String> getProjectContributorsUsernames(@PathVariable String fullname) throws IOException {
+        return gitHubApiUtil.getProjectContributorsUsernames(fullname);
     }
 }
 

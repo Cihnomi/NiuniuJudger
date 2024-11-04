@@ -25,10 +25,11 @@ CREATE TABLE Developer (
 );
 
 CREATE TABLE Project (
-                         id BIGINT PRIMARY KEY,
+                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
                          github_id VARCHAR(255) UNIQUE NOT NULL,
                          name VARCHAR(255) NOT NULL,
                          full_name VARCHAR(255),
+                         html_url VARCHAR(512),
                          description TEXT,
                          stars INT,
                          forks INT,

@@ -6,23 +6,19 @@
 <mapper namespace="com.example.Niuniu_Judger.mapper.ProjectMapper">
 
     <insert id="insertProject" parameterType="com.example.Niuniu_Judger.model.Project">
-        INSERT INTO project (github_id, name, full_name, owner_id, html_url, description, language, stargazers_count, forks_count, watchers_count, project_rank, created_at, updated_at)
-        VALUES (#{githubId}, #{name}, #{fullName}, #{ownerId}, #{htmlUrl}, #{description}, #{language}, #{stargazersCount}, #{forksCount}, #{watchersCount}, #{projectRank}, NOW(), NOW())
+        INSERT INTO project (github_id, name, full_name, html_url, description, stars, forks, watchers)
+        VALUES (#{githubId}, #{name}, #{fullName}, #{htmlUrl}, #{description}, #{stars}, #{forks}, #{watchers})
     </insert>
 
     <update id="updateProject" parameterType="com.example.Niuniu_Judger.model.Project">
         UPDATE project
         SET name = #{name},
             full_name = #{fullName},
-            owner_id = #{ownerId},
             html_url = #{htmlUrl},
             description = #{description},
-            language = #{language},
-            stargazers_count = #{stargazersCount},
-            forks_count = #{forksCount},
-            watchers_count = #{watchersCount},
-            project_rank = #{projectRank},
-            updated_at = NOW()
+            stars = #{stars},
+            forks = #{forks},
+            watchers = #{watchers}
         WHERE github_id = #{githubId}
     </update>
 
