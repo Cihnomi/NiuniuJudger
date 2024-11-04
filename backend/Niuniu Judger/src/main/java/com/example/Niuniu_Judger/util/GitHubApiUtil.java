@@ -298,7 +298,6 @@ public class GitHubApiUtil {
             developer.setFollowingCount(developerNode.path("following").asInt(0));
             developer.setPageRankScore(developerNode.path("page_rank_score").asDouble(0.0));
             developer.setContributionValue(developerNode.path("contribution_value").asDouble(0.0));
-            developer.setHtmlUrl(developerNode.path("html_url").asText(""));
             developer.setComment("");  // 视需求填入默认注释或从其他数据源获取
         }
 
