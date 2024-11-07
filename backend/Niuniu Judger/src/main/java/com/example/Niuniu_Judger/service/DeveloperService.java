@@ -39,8 +39,9 @@ public interface DeveloperService {
      * @param developer 开发者对象
      * @return Follower 分数
      */
+    /*
     double calculateDeveloperFollower(Developer developer) throws IOException;
-
+*/
     /**
      * 计算开发者的 TalentRank，结合 Follower分数 和 项目贡献度分数
      * @param developer 开发者对象

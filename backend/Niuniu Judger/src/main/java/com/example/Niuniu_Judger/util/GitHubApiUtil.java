@@ -460,7 +460,7 @@ public class GitHubApiUtil {
             if (kw == null || kw.isEmpty()) continue;
 
             String query = URLEncoder.encode(kw + " in:bio", "UTF-8");
-            String url = baseUrl + "/search/users?q=" + query + "&sort=followers&order=desc&per_page=3";
+            String url = baseUrl + "/search/users?q=" + query + "&sort=followers&order=desc&per_page=2";
 
             Request request = new Request.Builder()
                     .url(url)

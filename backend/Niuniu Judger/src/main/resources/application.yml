@@ -18,8 +18,7 @@ mybatis:
 
 github:
   api:
-    token: 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
-
+    token: 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
 openai:
   api:
     key: sk-fHcs3yhALTgidVWF88C53d8072A84eE3B9Be8485A18d5a31

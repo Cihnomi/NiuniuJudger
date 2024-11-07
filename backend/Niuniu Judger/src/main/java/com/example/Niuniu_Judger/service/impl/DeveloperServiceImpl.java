@@ -238,7 +238,7 @@ public class DeveloperServiceImpl implements DeveloperService {
             return 0.0;
         }
 
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
         List<Callable<Double>> tasks = new ArrayList<>();
         for (Project project : projects) {
             tasks.add(() -> {
@@ -347,6 +347,7 @@ public class DeveloperServiceImpl implements DeveloperService {
     /**
      * 计算开发者的 Follower 分数
      */
+    /*
     @Override
     public double calculateDeveloperFollower(Developer developer) throws IOException {
 
@@ -375,9 +376,11 @@ public class DeveloperServiceImpl implements DeveloperService {
         return (Follower / MAX_Follower_LOG_VALUE) * 100;
     }
 
+     */
     /**
      * 计算开发者的 TalentRank，结合 Follower 和贡献度
      */
+
     @Override
     public double calculateDeveloperTalentRank(Developer developer) throws IOException {
         long startTime = System.currentTimeMillis();
@@ -414,10 +417,11 @@ public class DeveloperServiceImpl implements DeveloperService {
         try {
             List<Developer> developers = gitHubApiUtil.searchDevelopersByKeywordAndSynonyms(keyword);
             List<DeveloperDTO> dtoList = new ArrayList<>();
-            for (Developer developer : developers) {
+            developers.parallelStream().forEach(developer -> {
                 DeveloperDTO dto = getDeveloperEvaluationv2(developer.getUsername());
                 dtoList.add(dto);
-            }
+            });
+
 
             dtoList.sort((d1, d2) -> Double.compare(d2.getTalentRank(), d1.getTalentRank()));
 
