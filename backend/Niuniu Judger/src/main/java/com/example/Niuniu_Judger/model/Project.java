@@ -9,8 +9,18 @@ public class Project {
     private String description;
     private int stars;
     private int forks;
+    private String language;
     private int watchers;
     private String htmlUrl;
+    private double projectImportance;
+
+    public double getProjectImportance(){
+        return projectImportance;
+    }
+
+    public void setProjectImportance(double projectImportance){
+        this.projectImportance = projectImportance;
+    }
 
     public String getHtmlUrl() {
         return htmlUrl;
@@ -83,5 +93,13 @@ public class Project {
 
     public void setWatchers(int watchers) {
         this.watchers = watchers;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 }

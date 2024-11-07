@@ -15,12 +15,10 @@ public class Developer {
     private String blog;
     private double talentRank;
     private String nation;
-    private double nationConfidence;
     private String domain;
-    private double domainConfidence;
     private int followersCount;
     private int followingCount;
-    private double pageRankScore;
+    private double FollowerScore;
     private double contributionValue;
 
     private String htmlUrl;
@@ -143,13 +141,7 @@ public class Developer {
         this.nation = nation;
     }
 
-    public double getNationConfidence() {
-        return nationConfidence;
-    }
 
-    public void setNationConfidence(double nationConfidence) {
-        this.nationConfidence = nationConfidence;
-    }
 
     public String getDomain() {
         return domain;
@@ -159,13 +151,6 @@ public class Developer {
         this.domain = domain;
     }
 
-    public double getDomainConfidence() {
-        return domainConfidence;
-    }
-
-    public void setDomainConfidence(double domainConfidence) {
-        this.domainConfidence = domainConfidence;
-    }
 
     public int getFollowersCount() {
         return followersCount;
@@ -183,12 +168,12 @@ public class Developer {
         this.followingCount = followingCount;
     }
 
-    public double getPageRankScore() {
-        return pageRankScore;
+    public double getFollowerScore() {
+        return FollowerScore;
     }
 
-    public void setPageRankScore(double pageRankScore) {
-        this.pageRankScore = pageRankScore;
+    public void setFollowerScore(double FollowerScore) {
+        this.FollowerScore = FollowerScore;
     }
 
     public double getContributionValue() {

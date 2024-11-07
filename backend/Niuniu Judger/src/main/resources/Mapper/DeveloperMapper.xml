@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mapper namespace="com.example.Niuniu_Judger.mapper.DeveloperMapper">
+
+    <!-- 插入Developer -->
+    <insert id="insertDeveloper" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO developers (github_id, username, avatarUrl, bio, company, location, email, publicRepos, name, profileUrl, blog, talentRank, nation, domain, followersCount, followingCount, FollowerScore, contributionValue, htmlUrl, comment)
+        VALUES (#{githubId}, #{username}, #{avatarUrl}, #{bio}, #{company}, #{location}, #{email}, #{publicRepos}, #{name}, #{profileUrl}, #{blog}, #{talentRank}, #{nation}, #{domain}, #{followersCount}, #{followingCount}, #{FollowerScore}, #{contributionValue}, #{htmlUrl}, #{comment})
+    </insert>
+
+    <!-- 查询一个Developer -->
+    <select id="getDeveloperById" resultType="com.example.Niuniu_Judger.model.Developer">
+        SELECT * FROM developers WHERE id = #{id}
+    </select>
+
+    <!-- 查询所有Developer -->
+    <select id="getAllDevelopers" resultType="com.example.Niuniu_Judger.model.Developer">
+        SELECT * FROM developers
+    </select>
+
+    <!-- 根据GitHub ID查询Developer -->
+    <select id="getDeveloperByGithubId" resultType="com.example.Niuniu_Judger.model.Developer">
+        SELECT * FROM developers WHERE github_id = #{githubId}
+    </select>
+
+    <!-- 更新Developer -->
+    <update id="updateDeveloper">
+        UPDATE developers
+        SET github_id = #{githubId},
+        username = #{username},
+        avatarUrl = #{avatarUrl},
+        bio = #{bio},
+        company = #{company},
+        location = #{location},
+        email = #{email},
+        publicRepos = #{publicRepos},
+        name = #{name},
+        profileUrl = #{profileUrl},
+        blog = #{blog},
+        talentRank = #{talentRank},
+        nation = #{nation},
+        domain = #{domain},
+        followersCount = #{followersCount},
+        followingCount = #{followingCount},
+        FollowerScore = #{FollowerScore},
+        contributionValue = #{contributionValue},
+        htmlUrl = #{htmlUrl},
+        comment = #{comment}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除Developer -->
+    <delete id="deleteDeveloper">
+        DELETE FROM developers WHERE id = #{id}
+    </delete>
+
+</mapper>

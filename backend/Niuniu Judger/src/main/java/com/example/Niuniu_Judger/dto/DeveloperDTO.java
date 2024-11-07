@@ -9,7 +9,6 @@ public class DeveloperDTO {
     private String username;
     private String avatarUrl;
     private String bio;
-    private String company;
     private String location;
     private String email;
     private int publicRepos;
@@ -18,12 +17,10 @@ public class DeveloperDTO {
     private String blog;
     private double talentRank;
     private String nation;
-    private double nationConfidence;
     private String domain;
-    private double domainConfidence;
     private int followersCount;
     private int followingCount;
-    private double pageRankScore;
+    private double FollowerScore;
     private double contributionValue;
     private String htmlUrl;
     private String comment;

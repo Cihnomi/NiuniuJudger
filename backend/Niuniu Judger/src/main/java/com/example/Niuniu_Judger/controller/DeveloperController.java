@@ -24,40 +24,6 @@ public class DeveloperController {
         this.gitHubApiUtil = gitHubApiUtil;
     }
 
-    // --- Developer Retrieval ---
-
-    /**
-     * 根据 GitHub ID 获取开发者信息
-     * @param githubId 开发者的 GitHub ID
-     * @return DeveloperDTO 开发者的数据传输对象
-     */
-    @GetMapping("/{githubId}")
-    public DeveloperDTO getDeveloperByGithubId(@PathVariable Long githubId) {
-        return developerService.getDeveloperByGithubId(githubId);
-    }
-
-    /**
-     * 根据用户名获取开发者信息
-     * @param name 开发者的用户名
-     * @return DeveloperDTO 开发者的数据传输对象
-     */
-    @GetMapping("/username/{name}")
-    public DeveloperDTO getDeveloperByUsername(@PathVariable String name) {
-        return developerService.getDeveloperByUsername(name);
-    }
-
-    // --- Developer Search and Filtering ---
-
-    /**
-     * 根据领域和国家/地区搜索开发者
-     * @param domain 开发者的专业领域
-     * @param nation 开发者的国家或地区
-     * @return List<DeveloperDTO> 开发者列表
-     */
-    @GetMapping("/search")
-    public List<DeveloperDTO> searchDevelopers(@RequestParam String domain, @RequestParam String nation) {
-        return developerService.searchDevelopers(domain, nation);
-    }
 
     /**
      * 根据名称搜索开发者
@@ -68,8 +34,6 @@ public class DeveloperController {
     public List<DeveloperDTO> searchDevelopersByName(@RequestParam String name) {
         return developerService.searchDevelopersByName(name);
     }
-
-    // --- Developer Evaluation and Ranking ---
 
     /**
      * 获取开发者的评估结果
@@ -87,37 +51,20 @@ public class DeveloperController {
      * @return String 评估报告
      */
     @GetMapping("/generateEvaluation")
-    public String generateDeveloperEvaluation(@RequestBody Developer developer) {
+    public String generateDeveloperEvaluation(@RequestBody Developer developer) throws IOException {
         return developerService.generateDeveloperEvaluation(developer);
     }
 
-    // --- Contribution and Project Metrics ---
-
     /**
      * 获取开发者参与的所有项目
-     * @param developerId 开发者的 ID
+     * @param username 开发者的
      * @return List<Project> 项目列表
      */
-    @GetMapping("/{developerId}/projects")
-    public List<Project> getProjectsByDeveloper(@PathVariable Long developerId) {
+    @GetMapping("/{username}/projects")
+    public List<Project> getProjectsByDeveloper(@PathVariable String username) throws IOException {
         Developer developer = new Developer();
-        developer.setId(developerId);
+        developer.setUsername(username);
         return developerService.getProjectsByDeveloper(developer);
-    }
-
-    /**
-     * 计算开发者在特定项目中的贡献度
-     * @param developerId 开发者的 ID
-     * @param projectId 项目的 ID
-     * @return double 贡献度得分
-     */
-    @GetMapping("/{developerId}/contributionScore")
-    public double calculateContributionScore(@PathVariable Long developerId, @RequestParam Long projectId) {
-        Developer developer = new Developer();
-        developer.setId(developerId);
-        Project project = new Project();
-        project.setId(projectId);
-        return developerService.calculateContributionScore(developer, project);
     }
 
     /**
@@ -132,68 +79,14 @@ public class DeveloperController {
         return developerService.calculateProjectImportance(project);
     }
 
-    // --- Inference and Confidence ---
-
     /**
-     * 推断开发者的国家/地区
-     * @param developerId 开发者的 ID
-     * @return String 国家或地区
+     * 根据领域搜索开发者
+     * @param keyword 领域
+     * @return List
      */
-    @GetMapping("/{developerId}/inferNation")
-    public String inferNation(@PathVariable Long developerId) {
-        Developer developer = new Developer();
-        developer.setId(developerId);
-        return developerService.inferNation(developer);
-    }
-
-    /**
-     * 计算开发者的国家/地区置信度
-     * @param developerId 开发者的 ID
-     * @return double 国家/地区置信度得分
-     */
-    @GetMapping("/{developerId}/nationConfidence")
-    public double calculateNationConfidence(@PathVariable Long developerId) {
-        Developer developer = new Developer();
-        developer.setId(developerId);
-        return developerService.calculateNationConfidence(developer);
-    }
-
-    /**
-     * 推断开发者的领域
-     * @param developerId 开发者的 ID
-     * @return String 开发者的领域
-     */
-    @GetMapping("/{developerId}/inferDomain")
-    public String inferDomain(@PathVariable Long developerId) {
-        Developer developer = new Developer();
-        developer.setId(developerId);
-        return developerService.inferDomain(developer);
-    }
-
-    /**
-     * 计算开发者的领域置信度
-     * @param developerId 开发者的 ID
-     * @return double 领域置信度得分
-     */
-    @GetMapping("/{developerId}/domainConfidence")
-    public double calculateDomainConfidence(@PathVariable Long developerId) {
-        Developer developer = new Developer();
-        developer.setId(developerId);
-        return developerService.calculateDomainConfidence(developer);
-    }
-
-    // --- Data Synchronization ---
-
-    /**
-     * 同步 GitHub 数据，更新开发者信息
-     */
-    @PostMapping("/sync")
-    public void syncDeveloperData() {
-        developerService.syncDeveloperData();
-    }
-    @GetMapping("/getprojectcontributorsusernames/{fullname}")
-    public List<String> getProjectContributorsUsernames(@PathVariable String fullname) throws IOException {
-        return gitHubApiUtil.getProjectContributorsUsernames(fullname);
+    @GetMapping("/searchbykeyword")
+    public List<DeveloperDTO> searchDevelopersByKeyword(@RequestParam String keyword) {
+        return developerService.searchDevelopersByKeyword(keyword);
     }
 }
 

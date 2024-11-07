@@ -105,8 +105,40 @@
           <source>${maven.compiler.source}</source>
           <target>${maven.compiler.target}</target>
         </configuration>
-      </plugin>
 
+      </plugin>
+      <!--      docker配置-->
+      <!-- docker插件-->
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.4.13</version>
+        <dependencies>
+          <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1</version>
+          </dependency>
+        </dependencies>
+
+        <configuration>
+          <!-- 远程Docker的地址 -->
+          <dockerHost>http://1.117.75.22:2375</dockerHost>
+          <!-- 镜像名称、前缀、项目名 -->
+          <imageName>sxl/niuniujudger</imageName>
+          <!-- Dockerfile的位置 -->
+          <dockerDirectory>src/main/docker</dockerDirectory>
+          <resources>
+            <resource>
+              <targetPath>/</targetPath>
+              <!-- 表示的target文件夹 -->
+              <directory>${project.build.directory}</directory>
+              <!-- 表示打出来的JAR包-->
+              <include>${project.build.finalName}.jar</include>
+            </resource>
+          </resources>
+        </configuration>
+      </plugin>
       <!-- Spring Boot Maven 插件 -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
