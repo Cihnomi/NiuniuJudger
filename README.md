@@ -11,7 +11,9 @@
 
 ## Demo演示视频
 
-由于Demo演示视频体积较大，无法上传GitHub，因此请前往夸克网盘查看：https://pan.quark.cn/s/5ee041d824cc
+由于Demo演示视频体积较大，无法上传GitHub，请前往夸克网盘查看：https://pan.quark.cn/s/5ee041d824cc
+
+或百度网盘https://pan.baidu.com/s/1Rwo75fN-paGCxZak85__kw?pwd=6qq2
 
 ---
 
