@@ -46,7 +46,7 @@ public class DeveloperController {
     }
 
     /**
-     * 生成开发者的评估报告
+     * 生成开发者的评价
      * @param developer 开发者对象
      * @return String 评估报告
      */

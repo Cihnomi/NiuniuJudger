@@ -85,6 +85,33 @@ public class DeveloperServiceImpl implements DeveloperService {
     }
 
     /**
+     * 获取开发者的评估结果v2
+     */
+    @Override
+    public DeveloperDTO getDeveloperEvaluationv2(String username) {
+        try {
+            long startTime = System.currentTimeMillis();
+            Developer developer = gitHubApiUtil.getDeveloperDetails(username);
+            String nation = inferNation(developer);
+            long endTime = System.currentTimeMillis(); // 获取结束时间
+            System.out.println("程序运行时间L1: " + (endTime - startTime) + " 毫秒");
+            startTime = System.currentTimeMillis();
+            String domain = inferDomain(developer);
+            endTime = System.currentTimeMillis(); // 获取结束时间
+            System.out.println("程序运行时间L2: " + (endTime - startTime) + " 毫秒");
+            developer.setNation(nation);
+            developer.setDomain(domain);
+            double talentRank = calculateDeveloperTalentRank(developer);
+            developer.setTalentRank(talentRank);
+            DeveloperDTO dto = new DeveloperDTO();
+            BeanUtils.copyProperties(developer, dto);
+            return dto;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    /**
      * 生成开发者的简要评价
      */
 
@@ -129,38 +156,57 @@ public class DeveloperServiceImpl implements DeveloperService {
     /**
      * 计算开发者在项目中的贡献度
      */
+
     public double calculateContributionScore(Developer developer, Project project) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);  // 创建一个包含3个线程的线程池
         try {
-            int totalCommits = gitHubApiUtil.getTotalCommits(project.getFullName());
-            int developerCommits = gitHubApiUtil.getDeveloperCommits(developer.getUsername(), project.getFullName());
+            // 创建任务并提交给线程池
+            Future<Integer> totalCommitsFuture = executor.submit(() -> gitHubApiUtil.getTotalCommits(project.getFullName()));
+            Future<Integer> developerCommitsFuture = executor.submit(() -> gitHubApiUtil.getDeveloperCommits(developer.getUsername(), project.getFullName()));
 
-            int totalMergedPRs = gitHubApiUtil.getTotalMergedPullRequests(project.getFullName());
-            int developerMergedPRs = gitHubApiUtil.getDeveloperMergedPullRequests(developer.getUsername(), project.getFullName());
+            Future<Integer> totalMergedPRsFuture = executor.submit(() -> gitHubApiUtil.getTotalMergedPullRequests(project.getFullName()));
+            Future<Integer> developerMergedPRsFuture = executor.submit(() -> gitHubApiUtil.getDeveloperMergedPullRequests(developer.getUsername(), project.getFullName()));
 
-            int totalResolvedIssues = gitHubApiUtil.getTotalResolvedIssues(project.getFullName());
-            int developerResolvedIssues = gitHubApiUtil.getDeveloperResolvedIssues(developer.getUsername(), project.getFullName());
+            Future<Integer> totalResolvedIssuesFuture = executor.submit(() -> gitHubApiUtil.getTotalResolvedIssues(project.getFullName()));
+            Future<Integer> developerResolvedIssuesFuture = executor.submit(() -> gitHubApiUtil.getDeveloperResolvedIssues(developer.getUsername(), project.getFullName()));
 
+            // 获取结果
+            int totalCommits = totalCommitsFuture.get();
+            int developerCommits = developerCommitsFuture.get();
 
+            int totalMergedPRs = totalMergedPRsFuture.get();
+            int developerMergedPRs = developerMergedPRsFuture.get();
+
+            int totalResolvedIssues = totalResolvedIssuesFuture.get();
+            int developerResolvedIssues = developerResolvedIssuesFuture.get();
+
+            // 检查数据
             if (totalCommits == 0 || totalMergedPRs == 0 || totalResolvedIssues == 0) {
                 return 0.0;
             }
 
+            // 权重设置
             double commitWeight = 0.4;
             double prWeight = 0.3;
             double issueWeight = 0.3;
 
+            // 计算各项得分
             double commitScore = (double) developerCommits / totalCommits * commitWeight;
             double prScore = (double) developerMergedPRs / totalMergedPRs * prWeight;
             double issueScore = (double) developerResolvedIssues / totalResolvedIssues * issueWeight;
 
+            // 计算贡献得分并返回
             double contributionScore = (commitScore + prScore + issueScore) * 100;
-            return Math.min(contributionScore, 100.0)/100;
+            return Math.min(contributionScore, 100.0) / 100;
 
-        } catch (Exception e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return 0.0;
+        } finally {
+            executor.shutdown();  // 关闭线程池
         }
     }
+
 
     /**
      * 计算项目的重要程度
@@ -369,7 +415,7 @@ public class DeveloperServiceImpl implements DeveloperService {
             List<Developer> developers = gitHubApiUtil.searchDevelopersByKeywordAndSynonyms(keyword);
             List<DeveloperDTO> dtoList = new ArrayList<>();
             for (Developer developer : developers) {
-                DeveloperDTO dto = getDeveloperEvaluation(developer.getUsername());
+                DeveloperDTO dto = getDeveloperEvaluationv2(developer.getUsername());
                 dtoList.add(dto);
             }
 

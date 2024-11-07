@@ -33,6 +33,7 @@ public interface DeveloperService {
      */
     String generateDeveloperEvaluation(Developer developer) throws IOException;
 
+    DeveloperDTO getDeveloperEvaluationv2(String username);
     /**
      * 计算开发者的 Follower 分数
      * @param developer 开发者对象
